@@ -1,0 +1,156 @@
+﻿@model IEnumerable<code_2.tbl_User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List Users</h2>
+<div class="container-fluid">
+    <div class="row">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            <div class="form-horizontal">
+                <div class="form-group" style="display: inline-flex">
+                    @*<label class="col-md-2 control-label">Search</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="searchTxt" placeholder="Enter Search Value" style="max-width:100%" />
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" type="submit">Search</button>
+                        </div>*@
+
+                    @Html.Label("Search", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-6">
+                        @Html.TextBox("searchTxt", null, new { @class = "form-control", @placeholder = "Enter Search Value", @style = "max-width:100%" })
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="col-md-12">
+
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserId)
+                    </th>
+                    <th>
+                        @Html.ActionLink("UserName", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "UserName", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Email", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Email", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Password", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Password", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Gender)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Password)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Gender)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+            @{
+                double totalPages = ViewBag.TotalPages;
+                if (totalPages > 1)
+                {
+                    <ul class="pagination">
+                        @if (ViewBag.PageNumber == 1)
+                        {
+                            <li>
+                                @Html.ActionLink("Previous", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink("Previous", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber - 1 })
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            if (i == ViewBag.PageNumber)
+                            {
+                                <li class="active">
+                                    @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = i })
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = i })
+                                </li>
+                            }
+                        }
+                        @if (ViewBag.PageNumber == totalPages)
+                        {
+                            <li>
+                                @Html.ActionLink("Next", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink("Next", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber + 1 })
+                            </li>
+                        }
+
+                    </ul>
+                }
+                else
+                {
+
+                }
+
+
+                @*for(int i = 1; i <= totalPages; i++ )
+            {
+                    <ul class="pagination">
+                        @if (i == ViewBag.PageNumber)
+                        {
+                            <li class="active">
+                                @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = i })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "UserName" : ViewBag.SortBy, PageNumber = i })
+                            </li>
+                        }
+
+                    </ul>
+
+            }*@
+            }
+        </div>
+    </div>
+</div>
+
